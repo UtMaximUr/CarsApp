@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">My Selection Of Cars</string>
+
+    <string name="select_brand">Select brand</string>
+    <string name="select_model">Select model</string>
+    <string name="select_year">Select year</string>
+    <string name="info_car">Info car</string>
+
+
+</resources>
