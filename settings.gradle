@@ -14,3 +14,11 @@ dependencyResolutionManagement {
 }
 rootProject.name = "My Selection Of Cars"
 include ':app'
+include ':data'
+include ':domain'
+include ':feature_brand'
+include ':feature_info'
+include ':feature_model'
+include ':feature_year'
+include ':core'
+include ':navigation'

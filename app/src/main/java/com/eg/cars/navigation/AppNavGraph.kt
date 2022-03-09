@@ -5,14 +5,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.eg.cars.feature_brand.ui.BrandScreen
-import com.eg.cars.feature_info.ui.InfoScreen
-import com.eg.cars.feature_model.ui.ModelScreen
-import com.eg.cars.feature_year.ui.YearScreen
-import com.eg.cars.utils.BRAND
-import com.eg.cars.utils.MODEL
-import com.eg.cars.utils.ParamType
-import com.eg.cars.utils.YEAR
+import com.eg.core.utils.*
+import com.eg.feature_brand.ui.BrandScreen
+import com.eg.feature_info.InfoScreen
+import com.eg.feature_model.ui.ModelScreen
+import com.eg.feature_year.ui.YearScreen
+import com.eg.navigation.NavigationDestination
 
 @Composable
 fun AppNavGraph(navController: NavHostController) {
