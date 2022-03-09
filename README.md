@@ -4,6 +4,7 @@ App for car selection.
 
 # Technology stack
 * Kotlin
+* Multi module
 * Single Activity
 * MVVM (Jetpack ViewModel + Flow)
 * Jetpack Navigation
