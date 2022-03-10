@@ -10,6 +10,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
 
 @Composable
 fun LoadingView(
@@ -27,7 +29,8 @@ fun LoadingView(
 @Composable
 fun LoadingItem() {
     CircularProgressIndicator(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
             .padding(16.dp)
             .wrapContentWidth(Alignment.CenterHorizontally)
     )
@@ -53,6 +56,35 @@ fun ErrorItem(
         )
         OutlinedButton(onClick = onClickRetry) {
             Text(text = "Try again")
+        }
+    }
+}
+
+@Composable
+fun <T : Any> ScreenState(items: LazyPagingItems<T>, modifier: Modifier = Modifier) {
+    items.apply {
+        when {
+            loadState.refresh is LoadState.Loading -> {
+                LoadingView(modifier = modifier)
+            }
+            loadState.append is LoadState.Loading -> {
+                LoadingItem()
+            }
+            loadState.refresh is LoadState.Error -> {
+                val e = items.loadState.refresh as LoadState.Error
+                ErrorItem(
+                    message = e.error.localizedMessage,
+                    modifier = modifier,
+                    onClickRetry = { retry() }
+                )
+            }
+            loadState.append is LoadState.Error -> {
+                val e = items.loadState.append as LoadState.Error
+                ErrorItem(
+                    message = e.error.localizedMessage,
+                    onClickRetry = { retry() }
+                )
+            }
         }
     }
 }

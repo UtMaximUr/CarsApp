@@ -10,7 +10,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.eg.domain.entity.Cars
@@ -53,34 +52,11 @@ fun ModelScreen(
                     )
                 }
             }
-            models.apply {
-                when {
-                    loadState.refresh is LoadState.Loading -> {
-                        item { LoadingView(modifier = Modifier.fillParentMaxSize()) }
-                    }
-                    loadState.append is LoadState.Loading -> {
-                        item { LoadingItem() }
-                    }
-                    loadState.refresh is LoadState.Error -> {
-                        val e = models.loadState.refresh as LoadState.Error
-                        item {
-                            ErrorItem(
-                                message = e.error.localizedMessage,
-                                modifier = Modifier.fillParentMaxSize(),
-                                onClickRetry = { retry() }
-                            )
-                        }
-                    }
-                    loadState.append is LoadState.Error -> {
-                        val e = models.loadState.append as LoadState.Error
-                        item {
-                            ErrorItem(
-                                message = e.error.localizedMessage,
-                                onClickRetry = { retry() }
-                            )
-                        }
-                    }
-                }
+            item {
+                ScreenState(
+                    items = models,
+                    modifier = Modifier.fillParentMaxSize()
+                )
             }
         }
     }
