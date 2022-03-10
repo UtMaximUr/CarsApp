@@ -4,26 +4,21 @@ class Resource<T> private constructor(val status: Status, val data: T?, val mess
     enum class Status {
         SUCCESS, ERROR, LOADING
     }
+
     companion object {
-        fun <T> success(data: T?, message: String = "Resource -> success"): Resource<T> {
+        fun <T> success(data: T?, message: String = "Success"): Resource<T> {
             return Resource(
                 Status.SUCCESS,
                 data,
                 message
             )
         }
-        fun <T> error(message: String = "Resource -> error"): Resource<T> {
+
+        fun <T> error(message: String = "Error connect"): Resource<T> {
             return Resource(
                 Status.ERROR,
                 null,
                 message
-            )
-        }
-        fun <T> loading(): Resource<T> {
-            return Resource(
-                Status.LOADING,
-                null,
-                null
             )
         }
     }
