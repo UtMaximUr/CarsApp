@@ -7,7 +7,8 @@ import com.eg.domain.entity.Brand
 import java.io.IOException
 
 class BrandSource(
-    private val remoteDataSource: RemoteDataSource
+    private val remoteDataSource: RemoteDataSource,
+    private val pageSize: Int
 ) : PagingSource<Int, Brand>() {
 
     override fun getRefreshKey(state: PagingState<Int, Brand>): Int? {
@@ -18,7 +19,7 @@ class BrandSource(
         return try {
             val nextPage = params.key ?: 1
             params.loadSize
-            val response = remoteDataSource.fetchBrands(nextPage)
+            val response = remoteDataSource.fetchBrands(nextPage, pageSize)
             val brands = response.brands.map { it.toBrand() }
             LoadResult.Page(
                 data = brands,

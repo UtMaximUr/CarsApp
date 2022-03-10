@@ -9,7 +9,8 @@ import java.io.IOException
 
 class ModelSource(
     private val id: String?,
-    private val remoteDataSource: RemoteDataSource
+    private val remoteDataSource: RemoteDataSource,
+    private val pageSize: Int
 ) : PagingSource<Int, Model>() {
 
     override fun getRefreshKey(state: PagingState<Int, Model>): Int? {
@@ -19,7 +20,7 @@ class ModelSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Model> {
         return try {
             val nextPage = params.key ?: 1
-            val response = remoteDataSource.fetchModels(id, nextPage)
+            val response = remoteDataSource.fetchModels(id, nextPage, pageSize)
             val models = response.models.map { it.toModel() }
             LoadResult.Page(
                 data = models,

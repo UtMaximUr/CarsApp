@@ -11,13 +11,13 @@ import kotlinx.coroutines.withContext
 
 class RemoteDataSourceImpl(private val api: ApiDataSource) : RemoteDataSource {
 
-    override suspend fun fetchBrands(page: Int): BrandResponse = withContext(Dispatchers.IO) {
-        api.loadBrands(page)
+    override suspend fun fetchBrands(page: Int, pageSize: Int): BrandResponse = withContext(Dispatchers.IO) {
+        api.loadBrands(page, pageSize)
     }
 
-    override suspend fun fetchModels(id: String?, page: Int): ModelsResponse =
+    override suspend fun fetchModels(id: String?, page: Int, pageSize: Int): ModelsResponse =
         withContext(Dispatchers.IO) {
-            api.loadModels(id, page)
+            api.loadModels(id, page, pageSize)
         }
 
     override suspend fun fetchYears(id: String?, name: String?): YearsResponse =

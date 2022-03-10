@@ -22,7 +22,7 @@ class CarsRepositoryImpl @Inject constructor(private val remoteDataSource: Remot
     override suspend fun fetchBrands(): Resource<Flow<PagingData<Brand>>> {
         return try {
             Resource.success(Pager(PagingConfig(pageSize = NETWORK_PAGE_SIZE)) {
-                BrandSource(remoteDataSource)
+                BrandSource(remoteDataSource, NETWORK_PAGE_SIZE)
             }.flow)
         } catch (exception: Exception) {
             Resource.error()
@@ -32,7 +32,7 @@ class CarsRepositoryImpl @Inject constructor(private val remoteDataSource: Remot
     override suspend fun fetchModels(id: String?): Resource<Flow<PagingData<Model>>> {
         return try {
             Resource.success(Pager(PagingConfig(pageSize = NETWORK_PAGE_SIZE)) {
-                ModelSource(id, remoteDataSource)
+                ModelSource(id, remoteDataSource, NETWORK_PAGE_SIZE)
             }.flow)
         } catch (exception: Exception) {
             Resource.error()

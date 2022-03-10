@@ -25,7 +25,7 @@ class ApiDataSource(private val assetManager: AssetManager) {
         .readTimeout(1, TimeUnit.SECONDS)
         .build()
 
-    fun loadBrands(page: Int): BrandResponse {
+    fun loadBrands(page: Int, pageSize: Int): BrandResponse {
         server.enqueue(MockResponse().setBody(assetManager.getBrandsList()))
 
         val request = request(
@@ -33,6 +33,7 @@ class ApiDataSource(private val assetManager: AssetManager) {
                 .newBuilder()
                 .addPathSegment("brands")
                 .addQueryParameter("page", page.toString())
+                .addQueryParameter("pageSize", pageSize.toString())
                 .build()
         )
 
@@ -42,7 +43,7 @@ class ApiDataSource(private val assetManager: AssetManager) {
         return BrandResponse(page = page, brands = cars.brands)
     }
 
-    fun loadModels(id: String?, page: Int): ModelsResponse {
+    fun loadModels(id: String?, page: Int, pageSize: Int): ModelsResponse {
         server.enqueue(MockResponse().setBody(assetManager.getBrandsList()))
 
         val request = request(
@@ -50,6 +51,7 @@ class ApiDataSource(private val assetManager: AssetManager) {
                 .addPathSegment("models")
                 .addQueryParameter("id", id)
                 .addQueryParameter("page", page.toString())
+                .addQueryParameter("pageSize", pageSize.toString())
                 .build()
         )
 

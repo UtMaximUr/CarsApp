@@ -8,9 +8,9 @@ import com.eg.data.network.entity.YearsResponse
 
 interface RemoteDataSource {
 
-    suspend fun fetchBrands(page: Int): BrandResponse
+    suspend fun fetchBrands(page: Int, pageSize: Int): BrandResponse
 
-    suspend fun fetchModels(id: String?, page: Int): ModelsResponse
+    suspend fun fetchModels(id: String?, page: Int, pageSize: Int): ModelsResponse
 
     suspend fun fetchYears(id: String?, name: String?): YearsResponse
 }
