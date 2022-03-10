@@ -13,5 +13,5 @@ interface CarsRepository {
 
     suspend fun fetchModels(id: String?): Resource<Flow<PagingData<Model>>>
 
-    suspend fun fetchYears(id: String?, name: String?): List<Year>
+    suspend fun fetchYears(id: String?, name: String?): Resource<Flow<List<Year>>>
 }
