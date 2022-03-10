@@ -1,7 +1,5 @@
 package com.eg.feature_brand
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -20,30 +18,20 @@ class BrandViewModel @Inject constructor(private val useCase: GetBrandsUseCase) 
 
     val brands: Flow<PagingData<Brand>> by lazy { MutableSharedFlow(replay = 1) }
 
-    override val progressState: LiveData<Boolean> by lazy {
-        MutableLiveData(true)
-    }
-
-    override val errorState: LiveData<String> by lazy {
-        MutableLiveData()
-    }
-
     fun fetchBrands() = viewModelScope.launch {
         val resource = useCase.invoke()
         when (resource.status) {
-            Resource.Status.LOADING -> {
-                progressState.setPostValue(resource.data == null)
-            }
             Resource.Status.SUCCESS -> {
-                progressState.setPostValue(resource.data == null)
+                progressState.setPostValue(false)
                 resource.data?.cachedIn(viewModelScope)?.collect {
                     (brands as MutableSharedFlow).emit(it)
                 }
             }
             Resource.Status.ERROR -> {
-                progressState.setPostValue(resource.data == null)
+                progressState.setPostValue(false)
                 errorState.setPostValue(resource.message.toString())
             }
+            else -> {}
         }
     }
 }

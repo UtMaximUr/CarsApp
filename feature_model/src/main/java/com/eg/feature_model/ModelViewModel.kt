@@ -1,16 +1,14 @@
 package com.eg.feature_model
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.eg.cars.main.base.BaseViewModel
+import com.eg.core.utils.setPostValue
 import com.eg.domain.entity.Cars
 import com.eg.domain.entity.Model
-import com.eg.domain.use_case.GetModelUseCase
-import com.eg.core.utils.setPostValue
 import com.eg.domain.entity.Resource
+import com.eg.domain.use_case.GetModelUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -22,14 +20,6 @@ import javax.inject.Inject
 class ModelViewModel @Inject constructor(private val useCase: GetModelUseCase) : BaseViewModel() {
 
     val models: Flow<PagingData<Model>> by lazy { MutableSharedFlow(replay = 1) }
-
-    override val progressState: LiveData<Boolean> by lazy {
-        MutableLiveData(true)
-    }
-
-    override val errorState: LiveData<String> by lazy {
-        MutableLiveData()
-    }
 
     fun fetchModel(cars: Cars?) = viewModelScope.launch {
         val resource = useCase.invoke(cars?.id)
