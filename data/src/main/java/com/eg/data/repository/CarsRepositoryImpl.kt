@@ -6,13 +6,11 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.eg.data.paged.BrandSource
 import com.eg.data.paged.ModelSource
-import com.eg.data.network.entity.YearsResponse
 import com.eg.data.utils.NETWORK_PAGE_SIZE
 import com.eg.domain.CarsRepository
 import com.eg.domain.entity.Brand
 import com.eg.domain.entity.Model
 import com.eg.domain.entity.Year
-import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -39,10 +37,8 @@ class CarsRepositoryImpl @Inject constructor(private val remoteDataSource: Remot
     override suspend fun fetchYears(id: String?, name: String?): Flow<List<Year>> =
         withContext(Dispatchers.IO) {
             val response = remoteDataSource.fetchYears(id, name)
-            val yearsResponse =
-                Gson().fromJson(response.body?.string(), YearsResponse::class.java)
             val years: Flow<List<Year>> = flow {
-                emit(yearsResponse.years.map { it.toYear() })
+                emit(response.years.map { it.toYear() })
             }
             years
         }

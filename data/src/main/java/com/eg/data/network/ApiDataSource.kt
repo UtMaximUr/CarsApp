@@ -10,7 +10,6 @@ import com.google.gson.Gson
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.Response
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import timber.log.Timber
@@ -26,7 +25,7 @@ class ApiDataSource(private val assetManager: AssetManager) {
         .readTimeout(5, TimeUnit.SECONDS)
         .build()
 
-    fun loadBrands(page: Int, pageSize: Int): Response {
+    fun loadBrands(page: Int, pageSize: Int): BrandResponse {
         val cars = Gson().fromJson(assetManager.getCarsList(), CarsResponse::class.java)
         val brands = Gson().toJson(BrandResponse(page, cars.brands))
         server.enqueue(MockResponse().setBodyDelay(2, TimeUnit.SECONDS).setBody(brands))
@@ -42,10 +41,13 @@ class ApiDataSource(private val assetManager: AssetManager) {
 
         Timber.d("request.url brands -> ${request.url}")
 
-        return okHttpClient.newCall(request).execute()
+        return Gson().fromJson(
+            okHttpClient.newCall(request).execute().body?.string(),
+            BrandResponse::class.java
+        )//okHttpClient.newCall(request).execute()
     }
 
-    fun loadModels(id: String?, page: Int, pageSize: Int): Response {
+    fun loadModels(id: String?, page: Int, pageSize: Int): ModelsResponse {
 
         val cars = Gson().fromJson(assetManager.getCarsList(), CarsResponse::class.java)
         val brand = cars.brands.first { it.id == id }
@@ -64,10 +66,14 @@ class ApiDataSource(private val assetManager: AssetManager) {
 
         Timber.d("request.url models -> ${request.url}")
 
-        return okHttpClient.newCall(request).execute()
+        return Gson()
+            .fromJson(
+                okHttpClient.newCall(request).execute().body?.string(),
+                ModelsResponse::class.java
+            )
     }
 
-    fun loadYears(id: String?, name: String?): Response {
+    fun loadYears(id: String?, name: String?): YearsResponse {
 
         val cars = Gson().fromJson(assetManager.getCarsList(), CarsResponse::class.java)
         val brand = cars.brands.first { it.id == id }
@@ -86,7 +92,10 @@ class ApiDataSource(private val assetManager: AssetManager) {
 
         Timber.d("request.url years -> ${request.url}")
 
-        return okHttpClient.newCall(request).execute()
+        return Gson().fromJson(
+            okHttpClient.newCall(request).execute().body?.string(),
+            YearsResponse::class.java
+        )
     }
 
     private fun request(url: HttpUrl): Request {
