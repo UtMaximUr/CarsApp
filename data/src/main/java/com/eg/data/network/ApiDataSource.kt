@@ -10,6 +10,7 @@ import com.google.gson.Gson
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.Response
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import timber.log.Timber
@@ -25,10 +26,10 @@ class ApiDataSource(private val assetManager: AssetManager) {
         .readTimeout(5, TimeUnit.SECONDS)
         .build()
 
-    fun loadBrands(page: Int, pageSize: Int): BrandResponse {
-        server.enqueue(
-            MockResponse().setBodyDelay(3, TimeUnit.SECONDS).setBody(assetManager.getBrandsList())
-        )
+    fun loadBrands(page: Int, pageSize: Int): Response {
+        val cars = Gson().fromJson(assetManager.getCarsList(), CarsResponse::class.java)
+        val brands = Gson().toJson(BrandResponse(page, cars.brands))
+        server.enqueue(MockResponse().setBodyDelay(2, TimeUnit.SECONDS).setBody(brands))
 
         val request = request(
             server.url(API_PATH)
@@ -41,13 +42,16 @@ class ApiDataSource(private val assetManager: AssetManager) {
 
         Timber.d("request.url brands -> ${request.url}")
 
-        val cars = Gson().fromJson(readBody(request), CarsResponse::class.java)
-        Timber.d("cars = ${cars.brands.size}")
-        return BrandResponse(page = page, brands = cars.brands)
+        return okHttpClient.newCall(request).execute()
     }
 
-    fun loadModels(id: String?, page: Int, pageSize: Int): ModelsResponse {
-        server.enqueue(MockResponse().setBody(assetManager.getBrandsList()))
+    fun loadModels(id: String?, page: Int, pageSize: Int): Response {
+
+        val cars = Gson().fromJson(assetManager.getCarsList(), CarsResponse::class.java)
+        val brand = cars.brands.first { it.id == id }
+
+        val models = Gson().toJson(ModelsResponse(page, brand.models))
+        server.enqueue(MockResponse().setBody(models))
 
         val request = request(
             server.url(API_PATH).newBuilder()
@@ -60,15 +64,17 @@ class ApiDataSource(private val assetManager: AssetManager) {
 
         Timber.d("request.url models -> ${request.url}")
 
-        val brand = Gson().fromJson(
-            readBody(request),
-            CarsResponse::class.java
-        ).brands.first { it.id == id }
-        return ModelsResponse(page = page, models = brand.models)
+        return okHttpClient.newCall(request).execute()
     }
 
-    fun loadYears(id: String?, name: String?): YearsResponse {
-        server.enqueue(MockResponse().setBody(assetManager.getBrandsList()))
+    fun loadYears(id: String?, name: String?): Response {
+
+        val cars = Gson().fromJson(assetManager.getCarsList(), CarsResponse::class.java)
+        val brand = cars.brands.first { it.id == id }
+        val model = brand.models.first { it.name == name }
+
+        val years = Gson().toJson(YearsResponse(model.years))
+        server.enqueue(MockResponse().setBody(years))
 
         val request = request(
             server.url(API_PATH).newBuilder()
@@ -80,12 +86,7 @@ class ApiDataSource(private val assetManager: AssetManager) {
 
         Timber.d("request.url years -> ${request.url}")
 
-        val brand = Gson().fromJson(
-            readBody(request),
-            CarsResponse::class.java
-        ).brands.first { it.id == id }
-        val models = brand.models.first { it.name == name }
-        return YearsResponse(years = models.years)
+        return okHttpClient.newCall(request).execute()
     }
 
     private fun request(url: HttpUrl): Request {
@@ -94,13 +95,5 @@ class ApiDataSource(private val assetManager: AssetManager) {
             .get()
             .header("Authorization", "xxx")
             .header("Content-Type", "application/json; charset=utf-8").build()
-    }
-
-    private fun readBody(request: Request): String? {
-        val response = okHttpClient.newCall(request).execute()
-        if (response.isSuccessful) {
-            return response.body?.string()
-        }
-        return response.message
     }
 }

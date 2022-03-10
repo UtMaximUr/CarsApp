@@ -1,16 +1,12 @@
 package com.eg.data.repository
 
-
-import com.eg.data.network.entity.BrandResponse
-import com.eg.data.network.entity.ModelsResponse
-import com.eg.data.network.entity.YearsResponse
-
+import okhttp3.Response
 
 interface RemoteDataSource {
 
-    suspend fun fetchBrands(page: Int, pageSize: Int): BrandResponse
+    suspend fun fetchBrands(page: Int, pageSize: Int): Response
 
-    suspend fun fetchModels(id: String?, page: Int, pageSize: Int): ModelsResponse
+    suspend fun fetchModels(id: String?, page: Int, pageSize: Int): Response
 
-    suspend fun fetchYears(id: String?, name: String?): YearsResponse
+    suspend fun fetchYears(id: String?, name: String?): Response
 }
