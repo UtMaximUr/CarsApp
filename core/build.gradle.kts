@@ -51,4 +51,6 @@ dependencies {
 
     api(Libs.Json.gson)
     api(Libs.Paging.paging)
+
+    api(Libs.Timber.timber)
 }
