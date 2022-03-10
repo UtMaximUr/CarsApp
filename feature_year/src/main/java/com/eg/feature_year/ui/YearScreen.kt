@@ -22,7 +22,6 @@ import com.eg.core.utils.toJson
 import com.eg.domain.entity.Cars
 import com.eg.feature_year.R
 import com.eg.feature_year.YearViewModel
-import timber.log.Timber
 
 @Composable
 fun YearScreen(
@@ -35,9 +34,7 @@ fun YearScreen(
         viewModel.fetchYear(arguments)
     }
 
-    val years = viewModel.years.collectAsState(listOf()).apply {
-        Timber.d("years = $value")
-    }
+    val years = viewModel.years.collectAsState(listOf())
 
     Column {
         TopBar(text = stringResource(id = R.string.select_year), onBackClick = {
