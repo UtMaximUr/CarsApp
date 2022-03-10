@@ -3,6 +3,7 @@ package com.eg.core.ui
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.text.style.TextAlign
 import com.eg.cars.main.base.BaseViewModel
 
 @Composable
@@ -14,5 +15,5 @@ fun ProgressView(viewModel: BaseViewModel) {
     if (progressState.value) {
         CircularProgressIndicator()
     }
-    TextField(text = errorState.value ?: "")
+    TextField(text = errorState.value ?: "", textAlign = TextAlign.Center)
 }
