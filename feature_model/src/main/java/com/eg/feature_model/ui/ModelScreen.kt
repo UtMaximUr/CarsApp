@@ -42,24 +42,22 @@ fun ModelScreen(
             }
         })
         Spacer(modifier = Modifier.height(16.dp))
-        Box(modifier = Modifier.fillMaxSize()) {
-            ProgressView(viewModel)
-            Column {
-                arguments?.brand?.let { TextField(text = it, fontWeight = FontWeight.Bold) }
-                LazyColumn {
-                    items(models) { item ->
-                        TextField(text = item?.name.toString()) { model ->
-                            navController.navigate(
-                                NavigationDestination.YearsScreen.route.plus(
-                                    "/${
-                                        arguments?.copy(model = model).toJson()
-                                    }"
-                                )
-                            )
-                        }
-                    }
+        arguments?.brand?.let { TextField(text = it, fontWeight = FontWeight.Bold) }
+        LazyColumn {
+            items(models) { item ->
+                TextField(text = item?.name.toString()) { model ->
+                    navController.navigate(
+                        NavigationDestination.YearsScreen.route.plus(
+                            "/${
+                                arguments?.copy(model = model).toJson()
+                            }"
+                        )
+                    )
                 }
             }
+        }
+        Box(modifier = Modifier.fillMaxSize()) {
+            ProgressView(viewModel)
         }
     }
 }

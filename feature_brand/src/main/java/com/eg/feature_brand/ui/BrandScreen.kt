@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -36,19 +37,22 @@ fun BrandScreen(
     Column {
         TopBar(text = stringResource(id = R.string.select_brand))
         Spacer(modifier = Modifier.height(16.dp))
-        Box(modifier = Modifier.fillMaxSize()) {
-            ProgressView(viewModel)
-            LazyColumn {
-                items(brands) { brand ->
-                    TextField(text = brand?.name.toString()) { name ->
-                        navController.navigate(
-                            NavigationDestination.ModelsScreen.route.plus(
-                                "/${Cars(id = brand?.id, brand = name).toJson()}"
-                            )
+        LazyColumn {
+            items(brands) { brand ->
+                TextField(text = brand?.name.toString()) { name ->
+                    navController.navigate(
+                        NavigationDestination.ModelsScreen.route.plus(
+                            "/${Cars(id = brand?.id, brand = name).toJson()}"
                         )
-                    }
+                    )
                 }
             }
+        }
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            ProgressView(viewModel)
         }
     }
 }
