@@ -1,4 +1,4 @@
-package com.eg.navigation
+package com.eg.core.navigation
 
 
 sealed class NavigationDestination(val route: String) {

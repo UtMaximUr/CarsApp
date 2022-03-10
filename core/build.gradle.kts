@@ -40,7 +40,6 @@ android {
 }
 
 dependencies {
-    api(project(":navigation"))
     api(project(":domain"))
 
     api(Libs.Core.coreKtx)

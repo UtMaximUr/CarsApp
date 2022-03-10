@@ -10,7 +10,7 @@ import com.eg.feature_brand.ui.BrandScreen
 import com.eg.feature_info.InfoScreen
 import com.eg.feature_model.ui.ModelScreen
 import com.eg.feature_year.ui.YearScreen
-import com.eg.navigation.NavigationDestination
+import com.eg.core.navigation.NavigationDestination
 
 @Composable
 fun AppNavGraph(navController: NavHostController) {

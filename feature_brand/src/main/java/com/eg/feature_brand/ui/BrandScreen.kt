@@ -19,7 +19,7 @@ import com.eg.core.ui.TextField
 import com.eg.core.ui.TopBar
 import com.eg.core.utils.toJson
 import com.eg.feature_brand.R
-import com.eg.navigation.NavigationDestination
+import com.eg.core.navigation.NavigationDestination
 
 
 @Composable
