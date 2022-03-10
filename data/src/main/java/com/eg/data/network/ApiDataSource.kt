@@ -21,12 +21,14 @@ class ApiDataSource(private val assetManager: AssetManager) {
     private val server = MockWebServer()
 
     private val okHttpClient = OkHttpClient.Builder()
-        .connectTimeout(1, TimeUnit.SECONDS)
-        .readTimeout(1, TimeUnit.SECONDS)
+        .connectTimeout(5, TimeUnit.SECONDS)
+        .readTimeout(5, TimeUnit.SECONDS)
         .build()
 
     fun loadBrands(page: Int, pageSize: Int): BrandResponse {
-        server.enqueue(MockResponse().setBody(assetManager.getBrandsList()))
+        server.enqueue(
+            MockResponse().setBodyDelay(3, TimeUnit.SECONDS).setBody(assetManager.getBrandsList())
+        )
 
         val request = request(
             server.url(API_PATH)
@@ -40,6 +42,7 @@ class ApiDataSource(private val assetManager: AssetManager) {
         Timber.d("request.url brands -> ${request.url}")
 
         val cars = Gson().fromJson(readBody(request), CarsResponse::class.java)
+        Timber.d("cars = ${cars.brands.size}")
         return BrandResponse(page = page, brands = cars.brands)
     }
 
