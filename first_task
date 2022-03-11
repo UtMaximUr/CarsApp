@@ -1,0 +1,8 @@
+private val targetNumber = (0..10).random()
+private val cards: Array<Int> = Array(10) { it }
+
+private fun counting(targetNumber: Int, cards: Array<Int>): Int {
+        return cards.filter { cardNumber ->
+            cards.contains(cardNumber - targetNumber)
+        }.size
+    }
