@@ -6,3 +6,18 @@ private fun counting(targetNumber: Int, cards: Array<Int>): Int {
             cards.contains(cardNumber - targetNumber)
         }.size
     }
+
+
+/**
+ * данный метод производительней, т.к. для возвращения результата не требуется создания списка, как при использовании filter()
+ */
+
+private fun counting(targetNumber: Int, cards: Array<Int>): Int {
+        var result = 0
+        cards.forEach { cardNumber ->
+            if (cards.contains(cardNumber - targetNumber)) {
+                 result += 1
+            }
+        }
+         return result
+   }
