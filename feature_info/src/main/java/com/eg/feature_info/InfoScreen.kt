@@ -28,7 +28,7 @@ fun InfoScreen(
         })
         Spacer(modifier = Modifier.height(16.dp))
         Column {
-            arguments?.brand?.let { TextField(text = it, fontWeight = FontWeight.Bold) }
+            arguments?.brand?.let { TextField(text = it) }
             arguments?.model?.let { TextField(text = it, fontWeight = FontWeight.Bold) }
             arguments?.year?.let { TextField(text = it, fontWeight = FontWeight.Bold) }
         }
